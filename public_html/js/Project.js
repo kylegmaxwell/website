@@ -1,6 +1,6 @@
 function Project() {
+    this.width = 800;
     this.height = 600;
-    this.width = 600;
 
     this.camera = null;
     this.renderer = null;

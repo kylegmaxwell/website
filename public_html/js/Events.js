@@ -34,7 +34,14 @@ function Events(initProject) {
     };
 
     this.handleSelect = function(obj) {
-        console.log(obj);
+        // Deal with THREE.js asyhc matrix update
+        obj.traverse( function (element) {
+            if (element.matrixWorldNeedsUpdate) {
+                // Tell three.js to update the matrix from the position attributes.
+                element.updateMatrixWorld(true);
+            }
+        });
+
         Blocks.select(this.inPort, false);
         Blocks.select(this.outPort, false);
 
@@ -58,13 +65,17 @@ function Events(initProject) {
         if (this.inPort && this.outPort) {
             var block1 = this.outPort.parent;
             var block2 = this.inPort.parent;
-            if (block1.uuid === block2.uuid) return;
-            var line = Blocks.connectBlocks(block1, block2);
+            var line = null;
+            if (block1.uuid !== block2.uuid) {
+                line = Blocks.connectBlocks(block1, block2);
+            }
             Blocks.select(this.inPort, false);
             Blocks.select(this.outPort, false);
             this.inPort = null;
             this.outPort = null;
-            this.addObject(line);
+            if (line) {
+                this.addObject(line);
+            }
         }
     };
 
@@ -84,12 +95,13 @@ function Events(initProject) {
         pos.unproject(this.project.camera);
         return pos;
     }
-    this.makeMoreBlocks = function() {
+    this.makeMoreBlocks = function(count) {
         var scene = this.project.scene;
         var size = Maths.computeBoundingBox(this.project.scene).size;
-        var posList = Maths.circleList(20, 4.0);
+        var radius = this.project.camera.position.z * 0.5;
+        radius = Math.max(1.0, radius);
+        var posList = Maths.circleList(count, radius);
         var centerPos = this.getCenterPos();
-        // console.log(centerPos);
         posList.forEach( function (pos) {
             pos.add(centerPos);
             this.addBlock(pos);
@@ -98,14 +110,85 @@ function Events(initProject) {
     };
 
     this.animatePositions = function () {
-        //TODO
+        var children = this.project.scene.children;
+        var delta = new THREE.Vector3(1,0,0);
+        children.forEach(function (child) {
+            if (child.userData.type === "block") {
+
+                // TODO also try curl noise
+                // this.randomizeVec(delta);
+                this.noiseVec(delta);
+
+                child.position.add(delta);
+                child.updateMatrixWorld(true);
+            }
+
+        }.bind(this));
+
+        var tmpVec1 = new THREE.Vector3(0,0,0);
+        var tmpVec2 = new THREE.Vector3(0,0,0);
+
+        children.forEach(function (child) {
+            if (child.userData.type === "line") {
+                var block1 = child.userData.block1;
+                var block2 = child.userData.block2;
+
+                Blocks.getBlockPos(block1, tmpVec1, false);
+                Blocks.getBlockPos(block2, tmpVec2, true);
+                child.geometry.vertices[0].copy(tmpVec1);
+                child.geometry.vertices[1].copy(tmpVec2);
+                child.geometry.verticesNeedUpdate = true;
+            }
+
+        }.bind(this));
+
+        this.render();
+
+    };
+
+    this.randomizeVec = function(vec) {
+        // vec.set(0,1,0);
+        vec.x = Math.random()-0.5;
+        vec.y = Math.random()-0.5;
+        vec.z = Math.random()-0.5;
+    };
+
+    this.noiseVec = function(vec) {
+        var freq = 2;
+        var valueX = noise.simplex2(vec.x * freq, vec.y * freq);
+        var valueY = noise.simplex2(vec.x * freq + 1234.567, vec.y * freq + 54.321);
+        vec.x = valueX;
+        vec.y = valueY;
+    };
+
+    this.randInt = function(count) {
+        var randFloat = Math.random();
+        var randInt = Math.floor(randFloat * (count));
+        return randInt;
+    };
+
+    this.randomConnection = function (count) {
+        var itr = 0;
+        var children = this.project.scene.children;
+
+        while( itr < count) {
+            var i = this.randInt(children.length);
+            var j = this.randInt(children.length);
+            this.handleSelect(children[i]);
+            this.handleSelect(children[j]);
+            itr++;
+        }
+        this.render();
     };
 
     this.onKeyDown = function( event ) {
-        console.log(event.which);
+        // console.log(event.which);
         switch(event.which) {
             case 66: // 'b'
-                this.makeMoreBlocks();
+                this.makeMoreBlocks(20);
+                return;
+            case 67: // 'c'
+                this.randomConnection(5);
                 return;
             case 71: // 'g'
                 this.animatePositions();

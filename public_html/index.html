@@ -6,14 +6,15 @@
     <title>Test</title>
     <style>
         body { margin: 0; }
-        canvas { width: 600px; height: 600px }
+        canvas { width: 800px; height: 600px }
     </style>
 </head>
 <body>
     <p>
         Connection test!
     </p>
-    <script src="js/three.js"></script>
+    <script src="js/lib/three.js"></script>
+    <script src="js/lib/perlin.js"></script>
     <script src="js/Blocks.js"></script>
     <script src="js/Maths.js"></script>
     <script src="js/events.js"></script>
@@ -21,6 +22,7 @@
     <script src="js/controls/OrbitControls.js"></script>
 
         <script>
+            noise.seed(0.5123);
 
             // Contains height and width
             var project = new Project();
@@ -28,7 +30,7 @@
             var events = new Events(project);
 
             project.camera = new THREE.PerspectiveCamera( 75, project.width/project.height, 0.1, 1000 );
-            project.camera.position.z = 5;
+            project.camera.position.z = 10;
 
             project.makeRenderer();
 
@@ -43,7 +45,7 @@
             project.controls.addEventListener( 'change', events.render.bind(events) );
 
             project.canvas.addEventListener( 'mousedown', events.onMouseDown.bind(events), false );
-            // window.addEventListener( 'mousemove', onMouseMove, false ); TODO
+            // window.addEventListener( 'mousemove', onMouseMove, false ); TODO use for dragging blocks
 
             document.addEventListener( 'keydown', events.onKeyDown.bind(events), false);
 

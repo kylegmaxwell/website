@@ -1,6 +1,6 @@
 var Blocks = {};
 
-Blocks.lineMaterial = new THREE.LineBasicMaterial( { color: 0xAAAAAA, linewidth: 5 } );
+Blocks.lineMaterial = new THREE.LineBasicMaterial( { color: 0xAAAAAA, linewidth: 2 } );
 Blocks.blockMaterial = new THREE.MeshBasicMaterial( { color: 0x00CED1 } );
 Blocks.portMaterial = new THREE.MeshBasicMaterial( { color: 0x005052 } );
 Blocks.selectedMaterial = new THREE.MeshBasicMaterial( { color: 0XFFAA00 } );
@@ -39,37 +39,42 @@ Blocks.makeBlock = function (x, y) {
 };
 
 
+Blocks.getBlockPos = function (block, vec, isIn) {
 
-Blocks.connectBlocks = function () {
+    var port = block.children[isIn ? 0 : 1];
+    vec.copy(port.position);
+    var delta = 0.2;
+    if (isIn) delta *= -1;
+    block.localToWorld(vec);
+};
+
+Blocks.connectBlocks = function (block1, block2) {
     // Create a private scope for these vectors so the constructor
     // only has to be called once per session
     var tmpVec1, tmpVec2;
 
-    return function (block1, block2) {
+    // TODO Not sure why single initialization was causing async problems
+    // return function (block1, block2) {
         if (!tmpVec1) tmpVec1 = new THREE.Vector3(0,0,0);
         if (!tmpVec2) tmpVec2 = new THREE.Vector3(0,0,0);
 
-        var outPort = block1.children[1];
-        var inPort = block2.children[0];
+        Blocks.getBlockPos(block1, tmpVec1, false);
+        Blocks.getBlockPos(block2, tmpVec2, true);
 
-        tmpVec1.copy(outPort.position);
-        tmpVec1.x += 0.2;
-        block1.localToWorld(tmpVec1);
-
-        tmpVec2.copy(inPort.position);
-        tmpVec2.x -= 0.2;
-        block2.localToWorld(tmpVec2);
-
-        return Blocks.makeLine(tmpVec1, tmpVec2);
+        return Blocks.makeLine(tmpVec1, tmpVec2, block1, block2);
     };
-}();
+// }();
 
-Blocks.makeLine = function (vStart, vEnd) {
+Blocks.makeLine = function (vStart, vEnd, block1, block2) {
     var geometry = new THREE.Geometry();
     geometry.vertices.push(vStart);
     geometry.vertices.push(vEnd);
     var material = Blocks.lineMaterial;
     var mesh = new THREE.Line(geometry, material);
+    mesh.userData["type"] = "line";
+    mesh.userData["block1"] = block1;
+    mesh.userData["block2"] = block2;
+
     return mesh;
 }
 
@@ -84,7 +89,7 @@ Blocks.select = function (object, selected) {
 
 Blocks.makeScene = function() {
     var scene = new THREE.Scene();
-    scene.add( Blocks.makeBlock(-1,0) );
-    scene.add( Blocks.makeBlock(1,0) );
+    scene.add( Blocks.makeBlock(-2,0) );
+    scene.add( Blocks.makeBlock(2,0) );
     return scene;
 };

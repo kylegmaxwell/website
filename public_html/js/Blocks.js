@@ -15,6 +15,7 @@ Blocks.makeBlock = function (x, y) {
 
     var blockObj = new THREE.Mesh( blockGeom, Blocks.blockMaterial );
     blockObj.userData["type"] = "block";
+    blockObj.name = "block";
 
     var inObj = new THREE.Mesh( blockGeom, Blocks.portMaterial );
     inObj.scale.set(0.4,0.4,1);
@@ -22,12 +23,14 @@ Blocks.makeBlock = function (x, y) {
     blockObj.children.push(inObj);
     inObj.parent = blockObj;
     inObj.userData["type"] = "inPort";
+    inObj.name = "in";
 
     var outObj = new THREE.Mesh( blockGeom, Blocks.portMaterial );
     outObj.scale.set(0.4,0.4,1);
     outObj.position.set(0.5,0,-0.001);
     outObj.parent = blockObj;
     outObj.userData["type"] = "outPort";
+    outObj.name = "out";
 
     blockObj.children.push(outObj);
     blockObj.position.set(x,y,0);
@@ -85,10 +88,3 @@ Blocks.makeScene = function() {
     scene.add( Blocks.makeBlock(1,0) );
     return scene;
 };
-
-Blocks.makeRenderer = function () {
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setSize( width, height );
-    renderer.setClearColor(0xF5F5F5);
-    return renderer;
-}

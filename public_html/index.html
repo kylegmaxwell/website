@@ -15,101 +15,39 @@
     </p>
     <script src="js/three.js"></script>
     <script src="js/Blocks.js"></script>
+    <script src="js/Maths.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/Project.js"></script>
     <script src="js/controls/OrbitControls.js"></script>
 
         <script>
-            var height = 600;
-            var width = 600;
 
-            var inPort = null;
-            var outPort = null;
+            // Contains height and width
+            var project = new Project();
 
-            var raycaster = new THREE.Raycaster();
-            var mouse = new THREE.Vector2();
+            var events = new Events(project);
 
-            var camera = new THREE.PerspectiveCamera( 75, width/height, 0.1, 1000 );
-            camera.position.z = 5;
+            project.camera = new THREE.PerspectiveCamera( 75, project.width/project.height, 0.1, 1000 );
+            project.camera.position.z = 5;
 
-            var renderer = Blocks.makeRenderer();
-            var canvas = renderer.domElement;
-            document.body.appendChild( canvas );
+            project.makeRenderer();
 
-            var scene = Blocks.makeScene();
+            project.canvas = project.renderer.domElement;
+            document.body.appendChild( project.canvas );
 
-            var controls = new THREE.OrbitControls( camera );
-            controls.noRotate = true;
+            project.scene = Blocks.makeScene();
 
-            var render = function () {
-                // requestAnimationFrame( render );
-                renderer.render(scene, camera);
-            };
-            controls.addEventListener( 'change', render );
+            project.controls = new THREE.OrbitControls( project.camera );
+            project.controls.noRotate = true;
 
-            function onMouseDown( event ) {
-                if (event.button !== 0) return;
+            project.controls.addEventListener( 'change', events.render.bind(events) );
 
-                // calculate mouse position in normalized device coordinates // (-1 to +1) for both components
-                mouse.x = ( event.layerX / width ) * 2 - 1;
-                mouse.y = - ( event.layerY / height ) * 2 + 1;
-                raycaster.setFromCamera( mouse, camera );
-                var intersects = raycaster.intersectObjects( scene.children, true );
-                if (intersects.length >0) {
-                    var obj = intersects[0].object;
-                    handleSelect(obj);
-                }
-                else {
-                    var wp = new THREE.Vector3(0, 0, 0);
-                    wp.project(camera);
-                    var pos = new THREE.Vector3(mouse.x, mouse.y, wp.z);
-                    pos.unproject(camera);
-                    var block = Blocks.makeBlock(pos.x, pos.y);
-                    addObject(block);
-                }
-                render();
-            }
-
-            function handleSelect(obj) {
-                Blocks.select(inPort, false);
-                Blocks.select(outPort, false);
-
-                if (obj.userData.type === "inPort") {
-                    inPort = obj;
-                }
-                if (obj.userData.type === "outPort") {
-                    outPort = obj;
-                }
-                if (obj.userData.type === "block") {
-                    if (outPort === null) {
-                        outPort = obj.children[1];
-                    } else if (inPort === null) {
-                        inPort = obj.children[0];
-                    }
-                }
-
-                Blocks.select(inPort, true);
-                Blocks.select(outPort, true);
-
-                if (inPort && outPort) {
-                    var block1 = outPort.parent;
-                    var block2 = inPort.parent;
-                    if (block1.uuid === block2.uuid) return;
-                    var line = Blocks.connectBlocks(block1, block2);
-                    Blocks.select(inPort, false);
-                    Blocks.select(outPort, false);
-                    inPort = null;
-                    outPort = null;
-                    addObject(line);
-                }
-            };
-
-            function addObject(object) {
-                scene.add(object);
-            };
-
-            canvas.addEventListener( 'mousedown', onMouseDown, false );
+            project.canvas.addEventListener( 'mousedown', events.onMouseDown.bind(events), false );
             // window.addEventListener( 'mousemove', onMouseMove, false ); TODO
 
-            render();
+            document.addEventListener( 'keydown', events.onKeyDown.bind(events), false);
+
+            events.render();
         </script>
 </body>
 </html>

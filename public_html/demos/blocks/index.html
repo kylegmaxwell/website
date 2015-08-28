@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <style>
+        body { margin: 0; }
+        canvas { width: 800px; height: 600px }
+    </style>
+</head>
+<body>
+    <p>
+        Connection test!
+    </p>
+    <script src="js/lib/three.js"></script>
+    <script src="js/lib/perlin.js"></script>
+    <script src="js/Blocks.js"></script>
+    <script src="js/Maths.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/Project.js"></script>
+    <script src="js/controls/OrbitControls.js"></script>
+
+        <script>
+            noise.seed(0.5123);
+
+            // Contains height and width
+            var project = new Project();
+
+            var events = new Events(project);
+
+            project.camera = new THREE.PerspectiveCamera( 75, project.width/project.height, 0.1, 1000 );
+            project.camera.position.z = 10;
+
+            project.makeRenderer();
+
+            project.canvas = project.renderer.domElement;
+            document.body.appendChild( project.canvas );
+
+            project.scene = Blocks.makeScene();
+
+            project.controls = new THREE.OrbitControls( project.camera );
+            project.controls.noRotate = true;
+
+            project.controls.addEventListener( 'change', events.render.bind(events) );
+
+            project.canvas.addEventListener( 'mousedown', events.onMouseDown.bind(events), false );
+            // window.addEventListener( 'mousemove', onMouseMove, false ); TODO use for dragging blocks
+
+            document.addEventListener( 'keydown', events.onKeyDown.bind(events), false);
+
+            events.render();
+        </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

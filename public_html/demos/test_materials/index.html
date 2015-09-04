@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Test Blocks</title>
+    <title>Test Materials</title>
     <style>
         body { margin: 0; }
         canvas { width: 800px; height: 600px }
@@ -11,12 +11,12 @@
 </head>
 <body>
     <p>
-        Blocks test!
+        Materials test!
     </p>
     <script src="../js/lib/three.js"></script>
     <script src="../js/lib/perlin.js"></script>
     <script src="../js/lib/controls/OrbitControls.js"></script>
-    <script src="js/Blocks.js"></script>
+    <script src="js/Scene.js"></script>
     <script src="js/Maths.js"></script>
     <script src="js/Events.js"></script>
     <script src="js/Project.js"></script>
@@ -29,25 +29,25 @@
 
             var events = new Events(project);
 
-            project.camera = new THREE.PerspectiveCamera( 75, project.width/project.height, 0.1, 1000 );
-            project.camera.position.z = 10;
+            project.camera = new THREE.PerspectiveCamera( 75, project.width/project.height, 0.01, 1000 );
+            project.camera.position.z = 40;
 
             project.makeRenderer();
 
             project.canvas = project.renderer.domElement;
             document.body.appendChild( project.canvas );
 
-            project.scene = Blocks.makeScene();
+            project.scene = Scene.makeScene();
 
             project.controls = new THREE.OrbitControls( project.camera );
-            project.controls.noRotate = true;
+            // project.controls.noRotate = true;
 
             project.controls.addEventListener( 'change', events.render.bind(events) );
 
-            project.canvas.addEventListener( 'mousedown', events.onMouseDown.bind(events), false );
-            // window.addEventListener( 'mousemove', onMouseMove, false ); TODO use for dragging blocks
+            // project.canvas.addEventListener( 'mousedown', events.onMouseDown.bind(events), false );
+            // // window.addEventListener( 'mousemove', onMouseMove, false ); TODO use for dragging blocks
 
-            document.addEventListener( 'keydown', events.onKeyDown.bind(events), false);
+            // document.addEventListener( 'keydown', events.onKeyDown.bind(events), false);
 
             events.render();
         </script>

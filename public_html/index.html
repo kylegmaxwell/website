@@ -8,17 +8,115 @@
         body {
             background-color: #A1B0C6
         }
-        a { color: #2233FF; }
+        main {
+            min-width: 400px;
+            max-width: 1200px;
+            min-height: 400px;
+        }
+        section {
+            background-color: #DFE7F8;
+            border-radius: 8px;
+            padding: 1.0em;
+            margin: 1.0em;
+        }
+        a {
+            color: #2233CC;
+            text-decoration: none;
+        }
         a:visited { color: #1224B3; }
+        footer {
+            text-align: center;
+            position: absolute;
+            bottom: 0px;
+            left: 50%;
+            margin-left: -60px;
+        }
+        .icon {
+            height: 16px;
+            width: 16px;
+            padding: 2px;
+        }
+        #profilePhoto {
+            width: 200px;
+            height: auto;
+            border-radius: 5px;
+        }
     </style>
 </head>
-<body>
-    <p>
-        Welcome! <br/>
-        WORK IN PROGRESS
-    </p>
-    <a href="demos/index.html">Demos</a>
+<body onload="populateContent()">
+    <header>
+        <h1>Kyle Maxwell's Page</h1>
+    </header>
+    <main>
+        <section>
+            <table>
+            <tr>
+            <td>Welcome to my page! As you might have noticed, this page is work in progress. Gradually I will be populating the demos section as I test out some new technologies.
+            </td>
+            <td>
+            <img id="profilePhoto" src="images/kyle-maxwell.jpg">
+            </td>
+            </tr>
+        </table>
+        </section>
+        <section>
+            <a href="demos/index.html">Demos</a>
+        </section>
+
+        <section style="display:none;">
+            <div id="itemscope" itemscope itemtype="http://schema.org/Person">
+              <img src="www.kylegmaxwell.com/images/kyle-maxwell.jpg" />
+              Name: <span itemprop="name"><strong>Kyle Maxwell</strong></span>
+              Profession: <span itemprop="jobTitle">Software Engineer</span>
+              Employer: <span itemprop="worksFor">Flux Factory, Inc.</span>
+              Web: <span itemprop="url"><a href="http://www.kylegmaxwell.com/">Link</a></span>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div id="networksContainer">
+            <!-- Content populated by JavaScript -->
+                <!-- Icons credit: -->
+                <!-- https://www.iconfinder.com/iconsets/micon-social-pack -->
+                <!-- https://www.iconfinder.com/icons/88435/panoramio_icon -->
+        </div>
+    <footer>
 </body>
+    <script>
+        var socialNetworks = {
+            'linkedin': { url: 'https://www.linkedin.com/in/kylegmaxwell'},
+            'facebook': { url: 'https://www.facebook.com/kyle.g.maxwell'},
+            'twitter': { url: 'https://twitter.com/kylutofu'},
+            'panoramio': { url: 'http://www.panoramio.com/user/15624'},
+            'vimeo': { url: 'https://vimeo.com/kylegmaxwell'},
+            'googleplus': { url: 'https://plus.google.com/+KyleMaxwellG'}
+        };
+
+        // Automatically create links and images for social networks
+        function populateContent() {
+            var container = document.querySelector("#networksContainer");
+            var networks = Object.keys(socialNetworks);
+            var len = networks.length;
+            // Iterate over networks and generate tags
+            for (var i=0; i<len; i++) {
+                var name = networks[i];
+                var url = socialNetworks[name].url;
+
+                // Create and attach link element
+                var link = document.createElement('a');
+                link.href = url;
+                container.appendChild(link);
+                link.title = 'Kyle Maxwell on '+name+'.';
+
+                // Create and attach image element
+                var image = document.createElement('img');
+                image.src = 'images/'+name+'.png';
+                link.appendChild(image);
+                image.classList.add("icon");
+            }
+        }
+    </script>
 </html>
 
 

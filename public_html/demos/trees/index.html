@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Trees!</title>
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+</head>
+<body onload="handleLoad()">
+    <header>
+        <h1>Tree test!</h1>
+    </header>
+    <main>
+        <section>
+            <!-- This is where the content will be inserted -->
+            <div id="divcontainer"></div>
+
+        </section>
+        <section>
+            <a href="../index.html">up</a> <br/>
+        </section>
+    </main>
+
+    <script src="node.js"></script>
+    <script src="index.js"></script>
+    <script>
+        function handleLoad() {
+            var container = document.getElementById("divcontainer");
+            var data =
+            {
+                "left":{
+                    "left":{},
+                    "right":{}
+                },
+                "right":{
+                }
+            };
+            setup(container, data);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

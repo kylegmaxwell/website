@@ -1,0 +1,29 @@
+body {
+    background-color: #A1B0C6
+}
+main {
+    min-width: 400px;
+    max-width: 1200px;
+    min-height: 400px;
+}
+section {
+    border-radius: 8px;
+    padding: 0.5em;
+}
+a {
+    color: #2233CC;
+    text-decoration: none;
+}
+a:visited {
+    color: #1224B3;
+}
+
+canvas {
+    background-color: #888888;
+    border-radius: 8px;
+    margin-top: 1.0em;
+}
+
+h2 {
+    margin: 0.25em;
+}

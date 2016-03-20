@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Games</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="shortcut icon" href="favicon.ico">
+</head>
+<body onload="handleLoad()">
+    <header>
+        <h2>Fractals!</h2>
+    </header>
+    <main>
+        <section>
+            <details>
+                <summary>Instructions</summary>
+                Not yet.<br/>
+            </details>
+            <!-- This is where the game canvas will be rendered -->
+            <canvas id="gameCanvas"></canvas>
+        </section>
+
+        <section>
+            <select id="difficultSelector">
+              <option value="0">Mandelbrot</option>
+              <option value="1">Buddhabrot</option>
+            </select>
+            <input id="iterInput" type="text" value="20" onkeyup="updateIter()" onblur="updateIter()"/>
+            <button type="button" id="incButton" onclick="incIter()">Increment</button>
+        </section>
+
+
+    </main>
+    <script src="index.js"></script>
+    <script src="mandelbrot.js"></script>
+</body>
+</html>

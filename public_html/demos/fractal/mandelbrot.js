@@ -1,3 +1,13 @@
+'use strict';
+
+/**
+ * Convert a number to 8 bit int.
+ * @param  {Number} value Number as float
+ * @return {Number}       Number as 8 bit int
+ */
+function toFixed(value) {
+    return Math.floor(value*255);
+}
 
 /**
  * Calculate the mandlebrot set with n iterations
@@ -30,9 +40,9 @@ function mandel(pixels, height, width, iter)
                 if (i==iter-1)
                 {
                     j=0;
-                    pixels[index+0]=j*255;
-                    pixels[index+1]=j*255;
-                    pixels[index+2]=j*255;
+                    pixels[index+0]=toFixed(j);
+                    pixels[index+1]=toFixed(j);
+                    pixels[index+2]=toFixed(j);
                 }
                 else //iterate
                 {
@@ -40,9 +50,9 @@ function mandel(pixels, height, width, iter)
                     if (x2+y2>4)
                     {
                         j=Math.pow((i/iter),0.15);
-                        pixels[index+0]=j*255;
-                        pixels[index+1]=j*255;
-                        pixels[index+2]=j*255;
+                        pixels[index+0]=toFixed(j);
+                        pixels[index+1]=toFixed(j);
+                        pixels[index+2]=toFixed(j);
                         i=iter;
                     }
                     else
@@ -52,10 +62,7 @@ function mandel(pixels, height, width, iter)
                     }
                 }
             }
-            // pixels[index+0]=255;
-            // pixels[index+1]=255;
-            // pixels[index+2]=0;
-            pixels[index+3]=255;
+            pixels[index+3]=toFixed(1);
             a+=cstep;
             index+=4;
         }

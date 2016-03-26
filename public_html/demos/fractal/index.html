@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Games</title>
     <link rel="stylesheet" type="text/css" href="main.css">
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="../../favicon.ico">
 </head>
 <body onload="handleLoad()">
     <header>
@@ -21,17 +21,22 @@
         </section>
 
         <section>
-            <select id="difficultSelector">
+            <select id="modeSelector" onchange="resetGame()">
               <option value="0">Mandelbrot</option>
               <option value="1">Buddhabrot</option>
+              <option value="2">Partibrot</option>
             </select>
             <input id="iterInput" type="text" value="20" onkeyup="updateIter()" onblur="updateIter()"/>
             <button type="button" id="incButton" onclick="incIter()">Increment</button>
+            <label><input id="paintCheck" type="checkbox" onchange="resetGame()">Paint Mode</label>
         </section>
 
 
     </main>
-    <script src="index.js"></script>
+    <script src="util.js"></script>
     <script src="mandelbrot.js"></script>
+    <script src="buddhabrot.js"></script>
+    <script src="partibrot.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>

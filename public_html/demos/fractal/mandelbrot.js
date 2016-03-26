@@ -1,43 +1,42 @@
 'use strict';
 
 /**
- * Convert a number to 8 bit int.
- * @param  {Number} value Number as float
- * @return {Number}       Number as 8 bit int
+ * Calculate and render the Mandelbrot set.
+ * @param {Number} height The number of vertical pixels
+ * @param {Number} width The number of horizontal pixels
+ * @param {Number} iter The maximum number of iterations
  */
-function toFixed(value) {
-    return Math.floor(value*255);
+function Mandelbrot(height, width, iter) {
+    this.height = height;
+    this.width = width;
+    this.iter = iter;
 }
 
 /**
- * Calculate the mandlebrot set with n iterations
+ * Render the mandlebrot set
  * {Uint8ClampedArray} pixels The r, g, b, a pixel data (0 to 255)
- * {Number} height The number of vertical pixels
- * {Number} width The number of horizontal pixels
- * {Number} iter The maximum number of iterations
  */
-function mandel(pixels, height, width, iter)
-{
+Mandelbrot.prototype.render = function (pixels) {
     // The mandelbrot viewport is 4 units by 4 units from <-2,-2> to <2,2>
-    var rstep = 4.0/height;
-    var cstep = 4.0/width;
+    var rstep = 4.0/(this.height-1);
+    var cstep = 4.0/(this.width-1);
     // a, b is the starting position for the iteration
     // x, y is the current position during the iteration
     var a=-2, b=-2, x=0, y=0, x2=0, y2=0;
     var r,c,i, j;
     var index=0;
     // Loop over each pixel
-    for (r=0;r<height;r++) {
+    for (r=0;r<this.height;r++) {
         a=-2;
-        for (c=0;c<width;c++) {
+        for (c=0;c<this.width;c++) {
             x=0;y=0;x2=0;y2=0;
-            for (i=0;i<iter;i++)
+            for (i=0;i<this.iter;i++)
             {
                 x2=x*x;
                 y2=y*y;
 
                 //reached maximum iterations
-                if (i==iter-1)
+                if (i==this.iter-1)
                 {
                     j=0;
                     pixels[index+0]=toFixed(j);
@@ -49,11 +48,11 @@ function mandel(pixels, height, width, iter)
                     //particle will diverge to infinity
                     if (x2+y2>4)
                     {
-                        j=Math.pow((i/iter),0.15);
+                        j=Math.pow((i/this.iter),0.15);
                         pixels[index+0]=toFixed(j);
                         pixels[index+1]=toFixed(j);
                         pixels[index+2]=toFixed(j);
-                        i=iter;
+                        i=this.iter;
                     }
                     else
                     {
@@ -68,4 +67,4 @@ function mandel(pixels, height, width, iter)
         }
         b+=rstep;
     }
-}
+};

@@ -25,9 +25,11 @@
               <option value="0">Mandelbrot</option>
               <option value="1">Buddhabrot</option>
               <option value="2">Partibrot</option>
+              <option value="3">Linebrot</option>
             </select>
             <input id="iterInput" type="text" value="20" onkeyup="updateIter()" onblur="updateIter()"/>
             <button type="button" id="incButton" onclick="incIter()">Increment</button>
+            <button type="button" id="clearButton" onclick="doClear()">Clear</button>
             <label><input id="paintCheck" type="checkbox" onchange="resetGame()">Paint Mode</label>
         </section>
 
@@ -37,6 +39,7 @@
     <script src="mandelbrot.js"></script>
     <script src="buddhabrot.js"></script>
     <script src="partibrot.js"></script>
+    <script src="linebrot.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

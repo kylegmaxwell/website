@@ -152,7 +152,7 @@ Partibrot.prototype.render = function (pixels) {
         var pos = this.particles[countIndex];
         cx = pos[0];
         cy = pos[1];
-        var ppos = this.prevParticles[countIndex];
+        var ppos = this.prevParticles[countIndex]||pos;
         px = ppos[0];
         py = ppos[1];
         var t = this.t;
@@ -182,10 +182,10 @@ Partibrot.prototype.render = function (pixels) {
         for (c=0;c<this.width;c++)
         {
             var j = count[countIndex]||[0,0,0];
-            pixels[index+0] = j[0];
-            pixels[index+1] = j[1];
-            pixels[index+2] = j[2];
-            pixels[index+3] = toFixed(1);
+            pixels[index+0] += j[0];
+            pixels[index+1] += j[1];
+            pixels[index+2] += j[2];
+            pixels[index+3] += toFixed(1);
             countIndex++;
             index+=4;
         }

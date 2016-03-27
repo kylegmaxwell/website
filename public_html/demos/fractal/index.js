@@ -37,8 +37,8 @@ function handleMouse(e) {
         ctx.beginPath();
         ctx.arc(x, y, 10, 0, 2 * Math.PI);
         ctx.fill();
+        render();
     }
-    render();
 }
 
 function getIter() {
@@ -67,6 +67,23 @@ function updateIter() {
         renderObj.iter = getIter();
     iterInput.value = renderObj.iter;
     render();
+}
+
+var renderRequest = null;
+function renderLoop() {
+    if (renderObj)
+        renderObj.iter++;
+    iterInput.value = renderObj.iter;
+    render();
+    renderRequest = requestAnimationFrame(renderLoop);
+}
+
+function playIter() {
+    renderRequest =requestAnimationFrame(renderLoop);
+}
+
+function stopIter() {
+    cancelAnimationFrame(renderRequest);
 }
 
 function incIter() {
@@ -112,6 +129,11 @@ function resetGame() {
 function render() {
     var width = gameCanvas.width;
     var height = gameCanvas.height;
+
+    // Partially occlude previous frame
+    ctx.fillStyle = "rgba(0,0,0,0.25)";
+    ctx.fillRect(0, 0, width, height);
+
     var imageData = ctx.getImageData(0, 0, width, height);
     var data = imageData.data;
 

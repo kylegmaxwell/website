@@ -29,12 +29,16 @@
             </select>
             <input id="iterInput" type="text" value="20" onkeyup="updateIter()" onblur="updateIter()"/>
             <button type="button" id="incButton" onclick="incIter()">Increment</button>
+            <button type="button" id="playButton" onclick="playIter()">Play</button>
+            <button type="button" id="stopButton" onclick="stopIter()">Stop</button>
             <button type="button" id="clearButton" onclick="doClear()">Clear</button>
             <label><input id="paintCheck" type="checkbox" onchange="resetGame()">Paint Mode</label>
         </section>
 
 
     </main>
+
+    <script src="sylvester.js"></script>
     <script src="util.js"></script>
     <script src="mandelbrot.js"></script>
     <script src="buddhabrot.js"></script>

@@ -13,7 +13,16 @@ function handleLoad() {
     if (mode != null) {
         modeSelector.value = mode;
     }
-    gameCanvas.width = 500;
+    var width = localStorage.getItem('fractal.width');
+    if (width != null) {
+        gameCanvas.width = width;
+        resInput.value = width;
+    }
+    var iter = localStorage.getItem('fractal.iter');
+    if (iter != null) {
+        // It could be very slow to calculate more than this
+        iterInput.value = Math.min(iter,1000);
+    }
     gameCanvas.height = gameCanvas.width;
     ctx = gameCanvas.getContext('2d');
     resetGame();
@@ -41,32 +50,32 @@ function handleMouse(e) {
     }
 }
 
-function getIter() {
-    var valueString = iterInput.value;
-    var value = DEFAULT_ITER;
+/**
+ * Get the value of a text input box as a number
+ * @param  {dom input} inputBox     The html input
+ * @param  {Number} defaultValue Value to use if input is not a number
+ * @return {Number}              The parsed value
+ */
+function getValue(inputBox, defaultValue) {
+    var valueString = inputBox.value;
+    var value = defaultValue;
     if (!isNaN(valueString)) {
         value = Number(valueString);
     }
     return value;
 }
 
-function updateT() {
-    var valueString = testInput.value;
-    var value = 0;
-    if (!isNaN(valueString)) {
-        value = Number(valueString);
-    }
+function updateIter() {
     if (renderObj)
-        renderObj.t = value;
+        renderObj.iter = getValue(iterInput, DEFAULT_ITER);
+    iterInput.value = renderObj.iter;
     render();
 }
 
-
-function updateIter() {
-    if (renderObj)
-        renderObj.iter = getIter();
-    iterInput.value = renderObj.iter;
-    render();
+function updateRes() {
+    gameCanvas.width = getValue(resInput, gameCanvas.width);
+    gameCanvas.height = gameCanvas.width;
+    resetGame();
 }
 
 var renderRequest = null;
@@ -102,7 +111,7 @@ function resetGame() {
 
     var width = gameCanvas.width;
     var height = gameCanvas.height;
-    var iter = getIter();
+    var iter = getValue(iterInput, DEFAULT_ITER);
     /*
     More ideas
         1. Interpolate particles between fixed steps
@@ -130,10 +139,6 @@ function render() {
     var width = gameCanvas.width;
     var height = gameCanvas.height;
 
-    // Partially occlude previous frame
-    ctx.fillStyle = "rgba(0,0,0,0.25)";
-    ctx.fillRect(0, 0, width, height);
-
     var imageData = ctx.getImageData(0, 0, width, height);
     var data = imageData.data;
 
@@ -146,4 +151,6 @@ function render() {
         }
     }
     localStorage.setItem('fractal.mode', parseInt(modeSelector.value));
+    localStorage.setItem('fractal.width', gameCanvas.width);
+    localStorage.setItem('fractal.iter', renderObj.iter);
 }

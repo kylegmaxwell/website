@@ -9,11 +9,11 @@
  */
 function Linebrot(height, width, iter, paintMode) {
     // Only render every skip-th line
-    this.skip = 79;
+    this.skip = 7;
     // Number of iterations per frame
     this.steps = 1;
     // Particles must move this much or they will be ignored
-    this.delta = 10;
+    this.delta = 1;
 
     this.height = height;
     this.width = width;
@@ -36,7 +36,6 @@ function Linebrot(height, width, iter, paintMode) {
     this.initBuffer(this.particles);
     this.checkIter();
 
-    // this.colorBuffer = [];
     this.paintBuffer = [];
 }
 
@@ -147,6 +146,10 @@ Linebrot.prototype.draw = function (ctx) {
 
     countIndex=0;
 
+    // Partially occlude previous frame
+    ctx.fillStyle = "rgba(0,0,0,0.25)";
+    ctx.fillRect(0, 0, this.width, this.height);
+
     var skipI = 0;
     if (!this.skipCache) {
         this.skipCache = [];
@@ -165,7 +168,6 @@ Linebrot.prototype.draw = function (ctx) {
             this.drawOne(ctx, this.skipCache[index], index);
         }
     }
-    this.drawOne(ctx, 159786, 159786);
 };
 
 Linebrot.prototype.checkOne = function (ctx, countIndex, skip) {

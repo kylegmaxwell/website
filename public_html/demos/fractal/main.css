@@ -25,5 +25,11 @@ canvas {
 }
 
 h2 {
+    margin: 1.0em;
+}
+
+input.text {
     margin: 0.25em;
+    padding-left: 1.0em;
+    width: 100px;
 }

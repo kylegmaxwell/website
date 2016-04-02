@@ -154,10 +154,10 @@ Linebrot.prototype.draw = function (ctx) {
     if (!this.skipCache) {
         this.skipCache = [];
         for (countIndex=0;countIndex<this.particles.length;countIndex++) {
-            var gotOne = this.checkOne(ctx, countIndex, this.skip);
+            var gotOne = this.checkOne(ctx, countIndex);
             if (gotOne) {
                 if (skipI % this.skip === 0) {
-                    this.drawOne(ctx, countIndex, this.skip);
+                    this.drawOne(ctx, countIndex, this.skipCache.length);
                     this.skipCache.push(countIndex);
                 }
                 skipI++;
@@ -170,7 +170,7 @@ Linebrot.prototype.draw = function (ctx) {
     }
 };
 
-Linebrot.prototype.checkOne = function (ctx, countIndex, skip) {
+Linebrot.prototype.checkOne = function (ctx, countIndex) {
     var cx, cy;
     //initialize positions
     var pos = this.prevPrevParticles[countIndex]||this.particles[countIndex];
@@ -200,7 +200,7 @@ Linebrot.prototype.toPixel = function (x, y) {
         0]);
 }
 
-Linebrot.prototype.drawOne = function (ctx, countIndex, skip) {
+Linebrot.prototype.drawOne = function (ctx, countIndex, index) {
     var cx, cy, px, py, ppx, ppy, pppx, pppy, mx, my;
     var r,c,i,j,v0,v1,v2,v3;
 
@@ -221,7 +221,7 @@ Linebrot.prototype.drawOne = function (ctx, countIndex, skip) {
     pppy = ppppos[1];
 
     if (this.inBounds(ppx, ppy)) {
-            var color = this.color(skip);
+            var color = this.color(index);
             v0 = this.toPixel(pppx, pppy);
             v1 = this.toPixel( ppx,  ppy);
             v2 = this.toPixel(  px,   py);

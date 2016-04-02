@@ -4,6 +4,8 @@ var DEFAULT_ITER = 20;
 var renderObj = null;
 var ctx = null;
 var paintMode = false;
+// Rendering is throttled to this frame rate
+var FPS = 10;
 
 /**
  * Main function that runs onLoad for the page
@@ -17,11 +19,6 @@ function handleLoad() {
     if (width != null) {
         gameCanvas.width = width;
         resInput.value = width;
-    }
-    var iter = localStorage.getItem('fractal.iter');
-    if (iter != null) {
-        // It could be very slow to calculate more than this
-        iterInput.value = Math.min(iter,1000);
     }
     gameCanvas.height = gameCanvas.width;
     ctx = gameCanvas.getContext('2d');
@@ -79,20 +76,33 @@ function updateRes() {
 }
 
 var renderRequest = null;
+var lastRenderTime = performance.now();
 function renderLoop() {
-    if (renderObj)
-        renderObj.iter++;
-    iterInput.value = renderObj.iter;
-    render();
+
+    var currentTime = performance.now();
+    var dt = currentTime - lastRenderTime;
+    // Throttle it to specified FPS
+    if (dt > 1000/FPS) {
+        if (renderObj)
+            renderObj.iter++;
+        iterInput.value = renderObj.iter;
+        render();
+        lastRenderTime = currentTime;
+    }
     renderRequest = requestAnimationFrame(renderLoop);
 }
 
 function playIter() {
-    renderRequest =requestAnimationFrame(renderLoop);
+    if (renderRequest == null) {
+        renderRequest = requestAnimationFrame(renderLoop);
+    }
 }
 
 function stopIter() {
-    cancelAnimationFrame(renderRequest);
+    if (renderRequest != null) {
+        cancelAnimationFrame(renderRequest);
+    }
+    renderRequest = null;
 }
 
 function incIter() {
@@ -132,6 +142,7 @@ function resetGame() {
             renderObj = new Linebrot(height, width, iter, paintMode);
             break;
     }
+    doClear();
     render();
 }
 
@@ -152,5 +163,4 @@ function render() {
     }
     localStorage.setItem('fractal.mode', parseInt(modeSelector.value));
     localStorage.setItem('fractal.width', gameCanvas.width);
-    localStorage.setItem('fractal.iter', renderObj.iter);
 }

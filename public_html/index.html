@@ -6,71 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kyle G Maxwell</title>
     <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="index.css">
     <link rel="shortcut icon" href="images/favicon.ico">
-    <style>
-
-        footer {
-            text-align: center;
-            left: 50%;
-            height: 100%;
-            margin-left: -60px;
-        }
-        #networksContainer {
-        position: relative;
-        height: auto;
-        }
-        .icon {
-            height: 16px;
-            width: 16px;
-            padding: 2px;
-        }
-        img.profile {
-            width: 100px;
-            height: auto;
-        }
-        img.tile {
-            width: 200px;
-            height: auto;
-            border-radius: 5px;
-            transform: scale(1.0,1.0);
-            transition: transform 0.25s;
-        }
-        img.tile:hover {
-          transform: scale(1.05,1.05);
-        }
-        div.center {
-            text-align: center;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-        .item {
-            order: 1;
-        }
-        h1 {
-            text-align: center;
-            margin: 0;
-        }
-    </style>
 </head>
 <body onload="populateContent()">
     <header>
-        <h1>Welcome, Bienvenido.
-            </h1>
+        <h1>Welcome, Bienvenido.</h1>
     </header>
     <main>
         <div class="center">
             <img class="profile" src="images/kyle-maxwell.jpg"><br>
-            Click on a tile below to view demo.
+            Click on a tile below to view.
         </div>
         <section class="container">
 
-            <div class="item"><a href="demos/fractal/index.html"><img class="tile" src="images/fractal.jpg"></a></div>
-            <div class="item"><a href="https://time-sweeper.herokuapp.com"><img class="tile" src="images/timesweeper.png"></a></div>
+            <div class="item"><a href="demos/fractal/index.html"><img class="tile" src="images/tile-fractal.jpg"></a></div>
+            <div class="item"><a href="https://time-sweeper.herokuapp.com"><img class="tile" src="images/tile-timesweeper.png"></a></div>
+            <div class="item"><a href="http://www.panoramio.com/user/15624?show=best"><img class="tile" src="images/tile-panoramio.png"></a></div>
         </section>
 
         <section style="display:none;">
@@ -101,8 +53,8 @@
             'twitter': { url: 'https://twitter.com/kylutofu'},
             'panoramio': { url: 'http://www.panoramio.com/user/15624'},
             'vimeo': { url: 'https://vimeo.com/kylegmaxwell'},
-            'googleplus': { url: 'https://plus.google.com/+KyleMaxwellG'},
-            'github': { url: 'https://github.com/kylegmaxwell'}
+            'github': { url: 'https://github.com/kylegmaxwell'},
+            'googleplus': { url: 'https://plus.google.com/+KyleMaxwellG'}
 
         };
 

@@ -233,7 +233,7 @@ Linebrot.prototype.drawOne = function (ctx, countIndex, index) {
             alpha *= 1.0-((mx*mx+my*my)*0.25);
             alpha = Math.min(Math.max(alpha,0.2),0.75);
             // alpha = 1;
-            var colorStr = "rgba("+color[0]+","+color[1]+","+color[2]+","+alpha+")"
+            var colorStr = "rgba("+color[0]+","+color[1]+","+color[2]+","+alpha+")";
             ctx.strokeStyle = colorStr;
 
             var d12 = v1.distanceFrom(v2);
